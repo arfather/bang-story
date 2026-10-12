@@ -96,7 +96,7 @@ export function Home() {
       return !!k?.configured && k.lastOk !== false
     }
     const issues: { what: string; blocks: string }[] = []
-    if (!ok('higgsfield')) issues.push({ what: 'kunci Higgsfield', blocks: 'gambar' })
+    if (!ok('huggingface')) issues.push({ what: 'token Hugging Face', blocks: 'gambar' })
     const llm = appSettings.llmProvider
     if (!ok(llm)) issues.push({ what: `kunci ${llmName(llm)}`, blocks: 'cerita' })
     else if (!appSettings.llmModels[llm]) issues.push({ what: `model ${llmName(llm)}`, blocks: 'cerita' })

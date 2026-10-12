@@ -5,13 +5,11 @@ import { cx } from './cx'
  * Families without their own mark use their maker's: Alibaba for Wan, HappyHorse and Z-Image, and
  * Higgsfield for its in-house Soul and Cinema Studio.
  */
-const FILES = import.meta.glob(['../assets/models/*.svg', '../assets/providers/higgsfield.png'], { eager: true, import: 'default' }) as Record<string, string>
+const FILES = import.meta.glob(['../assets/models/*.svg'], { eager: true, import: 'default' }) as Record<string, string>
 const file = (path: string): string | undefined => FILES[`../assets/${path}`]
 
 const FAMILY_LOGO: Record<string, { src: string; bg: string; inset: number }> = {
   'GPT Image': { src: 'models/openai.svg', bg: '#FFFFFF', inset: 0.2 },
-  Soul: { src: 'providers/higgsfield.png', bg: '#D1FE17', inset: 0 },
-  'Cinema Studio': { src: 'providers/higgsfield.png', bg: '#D1FE17', inset: 0 },
   Grok: { src: 'models/grok.svg', bg: '#FFFFFF', inset: 0.2 },
   Recraft: { src: 'models/recraft.svg', bg: '#FFFFFF', inset: 0.22 },
   Ideogram: { src: 'models/ideogram.svg', bg: '#FFFFFF', inset: 0.2 },

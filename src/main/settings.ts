@@ -1,4 +1,4 @@
-import { DEFAULT_IMAGE_MODEL, DEFAULT_VIDEO_MODEL, getImageModel, getVideoModel } from '@shared/higgsfield'
+import { HF_DEFAULT_IMAGE_MODEL, getHfImageModel } from '@shared/huggingface'
 import type { AppSettings } from '@shared/types'
 import { getDb } from './db'
 
@@ -11,8 +11,10 @@ export const DEFAULT_SETTINGS: AppSettings = {
   customBaseUrl: '',
   geminiTtsModel: 'gemini-3.8-flash-tts',
   elevenModel: 'eleven_multilingual_v2',
-  imageModel: DEFAULT_IMAGE_MODEL,
-  videoModel: DEFAULT_VIDEO_MODEL,
+  imageModel: HF_DEFAULT_IMAGE_MODEL,
+  videoModel: '',
+  imageProvider: 'huggingface',
+  hfImageModel: HF_DEFAULT_IMAGE_MODEL,
   whisperAuto: true
 }
 
@@ -27,9 +29,10 @@ export function getSettings(): AppSettings {
   }
   // A provider that no longer exists (e.g. from an older build) falls back to Gemini.
   if (!(out.llmProvider in DEFAULT_SETTINGS.llmModels)) out.llmProvider = 'gemini'
-  // Models dropped from the Higgsfield catalog fall back to the defaults.
-  out.imageModel = getImageModel(out.imageModel).id
-  out.videoModel = getVideoModel(out.videoModel).id
+  // Always use huggingface as image provider
+  out.imageProvider = 'huggingface'
+  out.imageModel = getHfImageModel(out.imageModel).id
+  out.hfImageModel = getHfImageModel(out.hfImageModel).id
   return out
 }
 

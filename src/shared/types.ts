@@ -1,8 +1,9 @@
 export type ProjectStatus = 'draft' | 'script' | 'storyboard' | 'editing' | 'exported'
 export type AspectRatio = '16:9' | '9:16'
 export type TtsProvider = 'gemini' | 'elevenlabs'
+export type ImageProvider = 'huggingface'
 export type LlmProvider = 'gemini' | 'openrouter' | 'groq' | 'custom'
-export type ApiProvider = 'higgsfield' | 'gemini' | 'elevenlabs' | 'openrouter' | 'groq' | 'custom'
+export type ApiProvider = 'huggingface' | 'gemini' | 'elevenlabs' | 'openrouter' | 'groq' | 'custom'
 /** Where a live model list comes from: an LLM provider, or a TTS catalog. */
 export type ModelSource = LlmProvider | 'gemini-tts' | 'elevenlabs'
 export type MotionType = 'camera' | 'video'
@@ -290,6 +291,10 @@ export interface AppSettings {
   /** Higgsfield models for new projects: the last ones picked in the Idea step. */
   imageModel: string
   videoModel: string
+  /** Provider for storyboard image generation: 'higgsfield' or 'huggingface' */
+  imageProvider?: ImageProvider
+  /** Hugging Face image model, defaults to FLUX.1-schnell */
+  hfImageModel?: string
   /** Time captions against the real voice with Whisper after narration is made (when the model is present). */
   whisperAuto: boolean
 }

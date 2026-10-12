@@ -1,0 +1,15 @@
+<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Hugging Face emoji face & hands -->
+  <circle cx="50" cy="50" r="45" fill="#FFD21E"/>
+  <!-- Eyes -->
+  <circle cx="36" cy="42" r="5" fill="#000"/>
+  <circle cx="64" cy="42" r="5" fill="#000"/>
+  <!-- Smile -->
+  <path d="M35 56 C40 68, 60 68, 65 56" stroke="#000" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+  <!-- Cheeks -->
+  <circle cx="28" cy="50" r="4.5" fill="#FFA500" opacity="0.6"/>
+  <circle cx="72" cy="50" r="4.5" fill="#FFA500" opacity="0.6"/>
+  <!-- Hands -->
+  <path d="M12 62 C16 48, 28 52, 26 66 C24 74, 15 72, 12 62 Z" fill="#FFD21E" stroke="#000" stroke-width="3"/>
+  <path d="M88 62 C84 48, 72 52, 74 66 C76 74, 85 72, 88 62 Z" fill="#FFD21E" stroke="#000" stroke-width="3"/>
+</svg>

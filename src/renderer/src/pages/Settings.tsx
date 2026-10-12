@@ -7,7 +7,6 @@ import {
   ExternalLink,
   Eye,
   EyeOff,
-  Film,
   FolderOpen,
   Image as ImageIcon,
   Info,
@@ -16,7 +15,6 @@ import {
   SlidersHorizontal,
   Trash2
 } from 'lucide-react'
-import { HF_IMAGE_MODELS, HF_VIDEO_MODELS } from '@shared/higgsfield'
 import { LANGUAGES, LLM_PROVIDERS } from '@shared/models'
 import type { ApiProvider, AppSettings, KeyStatus, KeyTestResult, LlmProvider, TtsProvider } from '@shared/types'
 import { Logo } from '../components/Logo'
@@ -103,7 +101,14 @@ function ProviderSelect<T extends string>({ value, options, onChange }: { value:
                 type="button"
                 role="option"
                 aria-selected={on}
-                onClick={() => {
+                onMouseDown={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  setOpen(false)
+                  if (!on) onChange(o.id)
+                }}
+                onClick={(e) => {
+                  e.stopPropagation()
                   setOpen(false)
                   if (!on) onChange(o.id)
                 }}
@@ -506,43 +511,66 @@ function TtsSection({ settings, statusOf, onChanged, onSettings }: { settings: A
   )
 }
 
-function HiggsfieldSection({ status, onChanged }: { status?: KeyStatus; onChanged: () => void }) {
+const HF_MODELS_LIST = [
+  { id: 'Viggle/Qwen-Image-2.1-viggle-turbo', name: 'Qwen-Image 2.1 Viggle Turbo (Super Cepat 1-2 Detik - Gratis)' }
+]
+
+function VisualSection({
+  settings,
+  statusOf,
+  onChanged,
+  onSettings
+}: {
+  settings: AppSettings
+  statusOf: (p: ApiProvider) => KeyStatus | undefined
+  onChanged: () => void
+  onSettings: (s: AppSettings) => void
+}) {
+  const status = statusOf('huggingface')
+
   return (
     <>
-      <SectionTitle icon={<ImageIcon className="size-5" />} title="Gambar dan video" sub="Higgsfield membuat gambar klip, lembar karakter, dan video AI." />
+      <SectionTitle
+        icon={<ImageIcon className="size-5" />}
+        title="Gambar AI (Hugging Face)"
+        sub="Penyedia AI serverless gratis untuk membuat gambar klip storyboard dan lembar karakter."
+      />
       <Card>
         <div className="flex items-center gap-3">
-          <ProviderLogo id="higgsfield" />
+          <ProviderLogo id="huggingface" />
           <div className="flex flex-1 flex-col">
-            <span className="text-base font-bold">Higgsfield</span>
-            <span className="text-[13px] text-ink-2">GPT Image 2.5, Kling, Seedance, dan model lain dari akun Higgsfield kamu</span>
+            <span className="text-base font-bold">Hugging Face (Gratis)</span>
+            <span className="text-[13px] text-ink-2">Model FLUX.1 dan SDXL serverless inference tanpa biaya kredit</span>
           </div>
           <StatusBadge status={status} />
         </div>
         <KeyForm
-          provider="higgsfield"
-          name="Higgsfield"
+          provider="huggingface"
+          name="Hugging Face"
           status={status}
-          placeholder="Tempel hasil tombol Copy API key"
+          placeholder="hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
           hint={
             <>
-              Di console Higgsfield, buka API Keys lalu klik <strong className="text-ink">Copy API key</strong> dan tempel di sini. Formatnya{' '}
-              <code className="rounded bg-sand px-1 font-mono text-xs">KEY_ID:KEY_SECRET</code>. Kalau kamu memegang Key ID dan Secret terpisah, gabungkan
-              dengan titik dua.
+              Buat Access Token gratis di Hugging Face (cukup pilih tipe role <strong className="text-ink">Read</strong>).
             </>
           }
-          help="Kunci dicek dengan permintaan estimasi biaya, tanpa memakai kredit."
-          link="https://higgsfield.ai/s/higgsfield-api-yt-bangtutorial-lPMrHK"
-          linkLabel="Buka console Higgsfield"
+          help="Serverless free tier Hugging Face tidak memotong saldo/kartu kredit."
+          link="https://huggingface.co/settings/tokens"
+          linkLabel="Buat User Access Token di Hugging Face"
           onChanged={onChanged}
         />
-        <p className="flex items-start gap-2.5 border-t border-dashed border-line pt-4 text-[13px] leading-relaxed text-ink-2">
-          <Film className="mt-0.5 size-4 shrink-0" />
-          <span>
-            Semua {HF_IMAGE_MODELS.length} model gambar dan {HF_VIDEO_MODELS.length} model video Higgsfield bisa dipakai. Modelnya dipilih per proyek
-            di langkah <strong className="text-ink">Ide cerita</strong>, bagian Model AI.
-          </span>
-        </p>
+        <div className="flex flex-col gap-1.5 border-t border-dashed border-line pt-4">
+          <span className="text-sm font-semibold">Model Gambar</span>
+          <Select
+            label="Model gambar Hugging Face"
+            value={settings.hfImageModel || 'black-forest-labs/FLUX.1-schnell'}
+            onChange={async (id) => onSettings(await window.api.settings.set({ hfImageModel: id, imageModel: id }))}
+            options={HF_MODELS_LIST.map((m) => ({ value: m.id, label: m.name }))}
+          />
+          <p className="text-[13px] text-muted">
+            Model gratis ini akan dipakai saat men-generate gambar klip di Storyboard dan lembar karakter.
+          </p>
+        </div>
       </Card>
     </>
   )
@@ -617,7 +645,7 @@ export function Settings() {
                 </div>
                 <LlmSection settings={settings} statusOf={statusOf} onChanged={reload} onSettings={setSettings} />
                 <TtsSection settings={settings} statusOf={statusOf} onChanged={reload} onSettings={setSettings} />
-                <HiggsfieldSection status={statusOf('higgsfield')} onChanged={reload} />
+                <VisualSection settings={settings} statusOf={statusOf} onChanged={reload} onSettings={setSettings} />
                 <WhisperSection settings={settings} onSettings={setSettings} />
               </>
             )}

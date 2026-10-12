@@ -89,7 +89,7 @@ function ClipTab({ clip, index }: { clip: Clip; index: number }) {
       {clip.motionType === 'video' ? (
         <Section title="Video AI">
           {video ? (
-            <p className="text-[13px] text-ink-2">Klip ini memakai video dari Higgsfield.</p>
+            <p className="text-[13px] text-ink-2">Klip ini memakai video gerak AI.</p>
           ) : (
             <p className="text-[13px] text-ink-2">Video belum dibuat. Sampai video siap, pratinjau memakai gambar diam.</p>
           )}
